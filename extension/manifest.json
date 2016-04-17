@@ -1,10 +1,10 @@
 {
-    "name": "Wikipedia",
+    "name": "TCRF",
     "version": "1.0.5",
     "icons": {
         "128": "wikipedia-icon.png"
     },
-    "description": "Chrome extension for Wikipedia fans!",
+    "description": "Chrome extension for TCRF fans!",
     "background": {
         "scripts": [
             "js/background.js"
@@ -14,11 +14,10 @@
         "bookmarks",
         "contextMenus",
         "tabs",
-        "*://*.wikipedia.org/",
-        "*://*.wikimedia.org/"
+        "*://tcrf.net/"
     ],
     "browser_action": {
-        "default_title": "Wikipedia",
+        "default_title": "TCRF",
         "default_icon": "wikipedia-icon.png",
         "default_popup": "popup.html"
     },

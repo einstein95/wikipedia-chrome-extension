@@ -29,7 +29,7 @@ function AtomFeedParser($window) {
 
 AtomFeedParser.$inject = ['$window'];
 
-function WikipediaFeeds($http, LocalStorageService, AtomFeedParser) {
+function TCRFFeeds($http, LocalStorageService, AtomFeedParser) {
     this.loadFeeds = function (tab) {
         var feedUrl = tab.feedUrl ? tab.feedUrl : tab.pageUrl;
         var feedData = LocalStorageService.getCache(feedUrl);
@@ -58,11 +58,11 @@ function WikipediaFeeds($http, LocalStorageService, AtomFeedParser) {
 
     };
 }
-WikipediaFeeds.$inject = ['$http', 'LocalStorageService', 'AtomFeedParser'];
+TCRFFeeds.$inject = ['$http', 'LocalStorageService', 'AtomFeedParser'];
 
 var selectedTabPrefKey = 'selectedTab';
 
-function WikipediaAppController($scope, $http, WikipediaFeeds, LocalStorageService, extensionURL, $templateCache) {
+function TCRFAppController($scope, $http, TCRFFeeds, LocalStorageService, extensionURL, $templateCache) {
 
     $templateCache.put('templates/feed.html', $http.get(extensionURL + 'templates/feed.html'));
     $templateCache.put('templates/page.html', $http.get(extensionURL + 'templates/page.html'));
@@ -120,12 +120,12 @@ function WikipediaAppController($scope, $http, WikipediaFeeds, LocalStorageServi
     $scope.loadTab = function (tab) {
         $scope.selectedTab = tab;
         if (!$scope.Feeds[tab.id]) {
-            $scope.Feeds[tab.id] = WikipediaFeeds.loadFeeds(tab);
+            $scope.Feeds[tab.id] = TCRFFeeds.loadFeeds(tab);
         }
     };
 }
 
-WikipediaAppController.$inject = ['$scope', '$http', 'WikipediaFeeds', 'LocalStorageService', 'extensionURL', '$templateCache'];
+TCRFAppController.$inject = ['$scope', '$http', 'TCRFFeeds', 'LocalStorageService', 'extensionURL', '$templateCache'];
 
 function LocalStorageService() {
     var cacheTime = 1000 * 60 * 30; //30 min
@@ -155,19 +155,19 @@ function LocalStorageService() {
     }
 }
 
-var App = angular.module('Wikipedia', []);
+var App = angular.module('TCRF', []);
 
 App.config(function () {
     $('#search').typeahead({
         source: function (query, process) {
-            return $.get('http://en.wikipedia.org/w/api.php?action=opensearch&format=json&search=' + query + '&namespace=0&suggest=', function (data) {
+            return $.get('https://tcrf.net/api.php?action=opensearch&format=json&search=' + query + '&namespace=0&suggest=', function (data) {
                 return process(data[1]);
             });
         }
     });
 });
 
-App.service('WikipediaFeeds', WikipediaFeeds);
+App.service('TCRFFeeds', TCRFFeeds);
 App.service('LocalStorageService', LocalStorageService);
 App.service('AtomFeedParser', AtomFeedParser);
 App.directive('feedsTab', function($timeout){
